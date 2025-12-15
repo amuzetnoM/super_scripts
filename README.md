@@ -1,5 +1,6 @@
 
-# super_scripts 🔧
+#  SUPER SCRIPTS 🪖🔧
+
 
 An opinionated collection of operational and security-focused scripts for developers and operators — curated tools to help run, secure, and maintain projects.
 
