@@ -68,17 +68,57 @@ $script:SensitiveFiles = @(
 # ══════════════════════════════════════════════════════════════════════════════
 
 function Write-Banner {
-    $banner = @"
-    ░  ░░░░  ░░░      ░░░       ░░░        ░░░      ░░
-    ▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒
-    ▓        ▓▓  ▓▓▓▓  ▓▓  ▓▓▓▓  ▓▓      ▓▓▓▓▓      ▓▓
-    █  ████  ██        ██  ████  ██  ██████████████  █
-    █  ████  ██  ████  ██       ███        ███      ██
+    # Try to set console code page and output encoding to UTF-8 so Unicode box-drawing and block characters render correctly
+    try {
+        chcp 65001 > $null 2>&1
+    } catch {}
 
-       e n v i r o n m e n t   p r o t e c t i o n
+    try {
+        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+    }
+    catch {
+        # Ignore if not supported in this environment; fallback below will use ASCII-only banner
+    }
+
+    $banner = @"
+    $banner = @"
+                          ;                                
+                          ED.                              
+                          E#Wi                 ,;         .
+  .    .                  E###G.             f#i         ;W
+  Di   Dt              .. E#fD#W;          .E#t         f#E
+  E#i  E#i            ;W, E#t t##L        i#W,        .E#f 
+  E#t  E#t           j##, E#t  .E#K,     L#D.        iWW;  
+  E#t  E#t          G###, E#t    j##f  :K#Wfff;     L##Lffi
+  E########f.     :E####, E#t    :E#K: i##WLLLLt   tLLG##L 
+  E#j..K#j...    ;W#DG##, E#t   t##L    .E#L         ,W#i  
+  E#t  E#t      j###DW##, E#t .D#W;       f#E:      j#E.   
+  E#t  E#t     G##i,,G##, E#tiW#G.         ,WW;   .D#j     
+  f#t  f#t   :K#K:   L##, E#K##i            .D#; ,WK,      
+   ii   ii  ;##D.    L##, E##D.               tt EG.       
+            ,,,      .,,  E#t                    ,         
+                          L:                                
 "@
+
+    # If console encoding doesn't support the Unicode characters above they may appear mangled.
+    # Provide an ASCII fallback that matches README visually when necessary.
+    $encodingName = ""
+    try { $encodingName = [Console]::OutputEncoding.WebName } catch { $encodingName = "unknown" }
+
+    if ($encodingName -and $encodingName -notlike "*utf*" ) {
+        $banner = @"
+  +-------------------------------------------------------------+
+  |   H A D E S   E N V I R O N M E N T   G U A R D   v2.0     |
+  +-------------------------------------------------------------+
+  |  The gatekeeper of your secrets. A powerful, interactive   |
+  |  PowerShell tool that hunts down hardcoded credentials     |
+  |  in any codebase and helps you secure them properly.       |
+  +-------------------------------------------------------------+
+"@
+    }
+
     Write-Host $banner -ForegroundColor Cyan
-    Write-Host "  The gatekeeper of your secrets. A powerful, interactive PowerShell tool that hunts down hardcoded credentials in any codebase and helps you secure them properly." -ForegroundColor Yellow
+    Write-Host "  Universal Codebase Secret Scanner and Manager" -ForegroundColor Yellow
     Write-Host "        ═══════════════════════════════════════════════════=" -ForegroundColor DarkGray
     Write-Host ""
 }
