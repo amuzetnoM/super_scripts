@@ -69,28 +69,17 @@ $script:SensitiveFiles = @(
 
 function Write-Banner {
     $banner = @"
+    ░  ░░░░  ░░░      ░░░       ░░░        ░░░      ░░
+    ▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒
+    ▓        ▓▓  ▓▓▓▓  ▓▓  ▓▓▓▓  ▓▓      ▓▓▓▓▓      ▓▓
+    █  ████  ██        ██  ████  ██  ██████████████  █
+    █  ████  ██  ████  ██       ███        ███      ██
 
-        ░  ░░░░  ░░░      ░░░       ░░░        ░░░      ░░
-        ▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒
-        ▓        ▓▓  ▓▓▓▓  ▓▓  ▓▓▓▓  ▓▓      ▓▓▓▓▓      ▓▓
-        █  ████  ██        ██  ████  ██  ██████████████  █
-        █  ████  ██  ████  ██       ███        ███      ██
-
-                 _                                       __ 
-   ___  ____ _  / /_   __(_)________  ____  ____ ___  ___  ____  / /_
-  / _ \/ __ \ \/ / /  / / / ___/ __ \/ __ \/ __ `__ \/ _ \/ __ \/ __/
- /  __/ / / /\  / / / / / /  / /_/ / / / / / / / / /  __/ / / / /_  
- \___/_/ /_/ /_/  \___/_/_/   \____/_/ /_/_/ /_/ /_/\___/_/ /_/\__/  
-       ____  _________  / /____  _____/ /_(_)___  ____         
-      / __ \/ ___/ __ \/ __/ _ \/ ___/ __/ / __ \/ __ \        
-     / /_/ / /  / /_/ / /_/  __/ /__/ /_/ / /_/ / / / /        
-    / .___/_/   \____/\__/\___/\___/\__/_/\____/_/ /_/         
-   /_/                                              v2.0      
-
+       e n v i r o n m e n t   p r o t e c t i o n
 "@
     Write-Host $banner -ForegroundColor Cyan
-    Write-Host "          Universal Codebase Secret Scanner and Manager" -ForegroundColor Yellow
-    Write-Host "        ════════════════════════════════════════════════════" -ForegroundColor DarkGray
+    Write-Host "  The gatekeeper of your secrets. A powerful, interactive PowerShell tool that hunts down hardcoded credentials in any codebase and helps you secure them properly." -ForegroundColor Yellow
+    Write-Host "        ═══════════════════════════════════════════════════=" -ForegroundColor DarkGray
     Write-Host ""
 }
 
