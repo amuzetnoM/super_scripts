@@ -8,7 +8,7 @@
 
 ## Notes
 - `visual_specs` requires `matplotlib` and `psutil`.
-- `odus` is a thin wrapper and expects ODUS to be installed under `/opt/odus/scripts`.
+- `odus` has been fully integrated into the repository under `super_scripts/odus/` (runtime scripts live in `super_scripts/odus/scripts/`).
 
 ## Contributors
 - Automated edits by repo maintainer scripts (2025-12-16)
