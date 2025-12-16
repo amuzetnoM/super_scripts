@@ -11,7 +11,7 @@ An opinionated collection of operational and security-focused scripts for develo
 
 - Centralize handy utilities used across multiple projects
 - Provide audited, well-documented scripts you can trust
-- Make security tools (like HADES) discoverable and easy to run
+- Make security tools discoverable and easy to run
 
 --
 
