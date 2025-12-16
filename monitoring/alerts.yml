@@ -1,0 +1,11 @@
+groups:
+  - name: monitoring
+    rules:
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          summary: "Redis is down on {{ $labels.instance }}"
+          description: "Prometheus reports Redis exporter is down for more than 1 minute."
