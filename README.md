@@ -8,7 +8,7 @@ This repository hosts small, well-tested utilities such as **HADES Environment G
 
 --
 
-## Why this repo?
+## What is this?
 
 - Centralize handy utilities used across multiple projects
 - Provide audited, well-documented scripts you can trust
