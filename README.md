@@ -17,8 +17,6 @@ An opinionated collection of operational and security-focused scripts for develo
 
 ## Included tools
 
-- **hades_env_guard/** — HADES Environment Guard: interactive secret scanner and manager (PowerShell)
-=======
 - **hades_env_guard/** — HADES Environment Guard: interactive secret scanner (PowerShell)
 
 - **c.ops_provisioner/** — Cloud Ops provisioning helpers (Python)
