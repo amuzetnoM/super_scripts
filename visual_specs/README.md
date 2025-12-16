@@ -3,9 +3,9 @@
 `visual_specs` is a small utility that collects compact system metrics and renders them into a single image (PNG) and a compact JSON summary.
 
 Key points:
-- Single PNG with a quick visual summary (platform, CPU, memory, disk, per-core utilisation, top processes)
+- Single PNG with a comprehensive visual summary (platform, kernel, CPU counts & per-core usage, CPU frequency, load averages, memory & swap, disk usage, top processes by CPU and memory)
 - Compact JSON for automation and archival
-- Intended to be easily run on CI or ad-hoc on a host
+- Designed for easy integration in CI, monitoring, or incident reporting (single artifact containing both human- and machine-readable data)
 
 ## Quick Start
 

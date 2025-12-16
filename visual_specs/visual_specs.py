@@ -57,52 +57,115 @@ def gather():
 
 
 def render(info, out_png, out_json):
-    fig = plt.figure(constrained_layout=True, figsize=(12, 8))
-    gs = fig.add_gridspec(2, 2)
+    def _bytes(n):
+        # human friendly bytes
+        for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
+            if n < 1024.0:
+                return f"{n:3.1f}{unit}"
+            n /= 1024.0
+        return f"{n:.1f}PB"
 
-    ax0 = fig.add_subplot(gs[0, 0])  # text summary
-    ax1 = fig.add_subplot(gs[0, 1])  # disk pie
-    ax2 = fig.add_subplot(gs[1, 0])  # per-core bars
-    ax3 = fig.add_subplot(gs[1, 1])  # top procs
+    fig = plt.figure(constrained_layout=True, figsize=(14, 10))
+    gs = fig.add_gridspec(3, 2, height_ratios=[1, 1, 1])
 
-    ax0.axis("off")
-    t = []
-    t.append(f"Platform: {info['platform']}")
-    t.append(f"Kernel: {info['uname'].get('release','-')} ({info['uname'].get('machine','-')})")
-    t.append(f"CPU: {info['cpu_count_physical'] or '-'}p / {info['cpu_count_logical']}l")
+    ax_text = fig.add_subplot(gs[0, 0])      # textual overview
+    ax_disk = fig.add_subplot(gs[0, 1])      # disk pie
+    ax_cpu = fig.add_subplot(gs[1, 0])       # per-core bars
+    ax_load = fig.add_subplot(gs[1, 1])      # loadavg + freq
+    ax_top_cpu = fig.add_subplot(gs[2, 0])   # top CPU procs
+    ax_top_mem = fig.add_subplot(gs[2, 1])   # top MEM procs
+
+    # --- Textual summary ---
+    ax_text.axis('off')
+    lines = []
+    lines.append(f"Platform: {info['platform']}")
+    lines.append(f"Kernel: {info['uname'].get('release','-')} ({info['uname'].get('machine','-')})")
+    lines.append(f"CPU: {info['cpu_count_physical'] or '-'}p / {info['cpu_count_logical']}l")
     fq = info.get('cpu_freq_mhz', {})
     if fq:
-        t.append(f"CPU Freq: {int(fq.get('current', fq.get('max',0)))} MHz")
-    t.append(f"Memory Used: {info['mem'].get('percent',0)}% of {info['mem'].get('total',0)//(1024**3)} GB")
-    t.append(f"Disk Used: {info['disk'].get('percent',0)}% of {info['disk'].get('total',0)//(1024**3)} GB")
-    text = "\n".join(t)
-    ax0.text(0, 1, textwrap.fill(text, 60), fontsize=10, va="top")
+        lines.append(f"CPU Freq (MHz): cur={int(fq.get('current',0))} max={int(fq.get('max',0))} min={int(fq.get('min',0))}")
+    lines.append(f"Load Avg (1m,5m,15m): {', '.join([str(round(x,2)) for x in (info.get('loadavg') or [])])}")
+    mem = info.get('mem', {})
+    lines.append(f"Memory: {mem.get('percent',0)}% used of {_bytes(mem.get('total',0))} (avail {_bytes(mem.get('available',0))})")
+    swap = info.get('swap', {})
+    if swap.get('total', 0):
+        lines.append(f"Swap: {swap.get('percent',0)}% used of {_bytes(swap.get('total',0))} (used {_bytes(swap.get('used',0))})")
+    disk = info.get('disk', {})
+    lines.append(f"Disk (/): {disk.get('percent',0)}% used of {_bytes(disk.get('total',0))} (used {_bytes(disk.get('used',0))})")
 
-    used = info['disk']['used']
-    free = info['disk']['free']
-    ax1.pie([used, free], labels=[f"Used {info['disk']['percent']}%", "Free"], autopct="%1.0f%%", colors=["#ff6b6b", "#4ecdc4"])
-    ax1.set_title("/ (root) disk usage")
+    ax_text.text(0, 1, '\n'.join(lines), fontsize=9, va='top')
 
-    per = info['percpu_percent']
-    ax2.bar(range(len(per)), per, color="#1f77b4")
-    ax2.set_ylim(0, 100)
-    ax2.set_xlabel("CPU core")
-    ax2.set_ylabel("% util")
-    ax2.set_title("Per-core CPU utilization")
+    # --- Disk pie ---
+    used = disk.get('used', 0)
+    free = disk.get('free', 0)
+    sizes = [used, free]
+    labels = [f"Used ({disk.get('percent',0)}%)", f"Free ({100-disk.get('percent',0)}%)"]
+    wedges, texts, autotexts = ax_disk.pie(sizes, labels=labels, autopct='%1.0f%%', colors=['#ff6b6b','#4ecdc4'], startangle=140, pctdistance=0.75)
+    for t in texts + autotexts:
+        t.set_fontsize(8)
+    ax_disk.set_title("/ (root) disk usage")
 
-    top = info['top_cpu']
-    names = [f"{p.get('name','?')} ({p.get('pid')})" for p in top]
+    # --- Per-core CPU bars ---
+    per = info.get('percpu_percent', [])
+    x = list(range(len(per)))
+    cmap = plt.get_cmap('viridis')
+    if per:
+        norm = [min(1.0, p/100.0) for p in per]
+        colors = [cmap(v) for v in norm]
+    else:
+        colors = '#1f77b4'
+    bars = ax_cpu.bar(x, per, color=colors)
+    ax_cpu.set_ylim(0, 100)
+    ax_cpu.set_xlabel('CPU core')
+    ax_cpu.set_ylabel('% util')
+    ax_cpu.set_title('Per-core CPU utilization')
+    ax_cpu.grid(axis='y', linestyle=':', alpha=0.5)
+    # annotate
+    for i, b in enumerate(bars):
+        h = b.get_height()
+        ax_cpu.annotate(f"{h:.0f}%", xy=(b.get_x() + b.get_width() / 2, h), xytext=(0, 3), textcoords='offset points', ha='center', va='bottom', fontsize=8)
+
+    # --- Loadavg and CPU freq ---
+    load = info.get('loadavg') or []
+    ax_load.axis('off')
+    la = ', '.join([str(round(x,2)) for x in load]) if load else '-'
+    freq = info.get('cpu_freq_mhz', {})
+    freq_txt = f"CPU Freq (MHz): cur={int(freq.get('current',0))} max={int(freq.get('max',0))}"
+    ax_load.text(0, 1, f"Load Avg (1m,5m,15m): {la}\n{freq_txt}", fontsize=9, va='top')
+
+    # --- Top processes by CPU ---
+    top = info.get('top_cpu', [])
+    names_cpu = [f"{p.get('name','?')} ({p.get('pid')})" for p in top]
     cpus = [p.get('cpu_percent', 0) for p in top]
-    if not names:
-        names = ["-"]
+    if not names_cpu:
+        names_cpu = ['-']
         cpus = [0]
-    ax3.barh(range(len(names)), cpus, color="#ffa600")
-    ax3.set_yticks(range(len(names)))
-    ax3.set_yticklabels(names, fontsize=8)
-    ax3.set_xlabel("% CPU")
-    ax3.set_title("Top processes by CPU")
+    y_pos = list(range(len(names_cpu)))
+    bars_cpu = ax_top_cpu.barh(y_pos, cpus, color='#ffa600')
+    ax_top_cpu.set_yticks(y_pos)
+    ax_top_cpu.set_yticklabels(names_cpu, fontsize=8)
+    ax_top_cpu.set_xlabel('% CPU')
+    ax_top_cpu.set_title('Top processes by CPU')
+    for i, b in enumerate(bars_cpu):
+        ax_top_cpu.annotate(f"{b.get_width():.1f}%", xy=(b.get_width(), b.get_y() + b.get_height() / 2), xytext=(3, 0), textcoords='offset points', va='center', fontsize=8)
 
-    fig.suptitle(f"Visual System Snapshot - {info['timestamp']}", fontsize=12)
+    # --- Top processes by Memory ---
+    topm = info.get('top_mem', [])
+    names_mem = [f"{p.get('name','?')} ({p.get('pid')})" for p in topm]
+    mems = [p.get('memory_percent', 0) for p in topm]
+    if not names_mem:
+        names_mem = ['-']
+        mems = [0]
+    y_pos_m = list(range(len(names_mem)))
+    bars_mem = ax_top_mem.barh(y_pos_m, mems, color='#1f77b4')
+    ax_top_mem.set_yticks(y_pos_m)
+    ax_top_mem.set_yticklabels(names_mem, fontsize=8)
+    ax_top_mem.set_xlabel('% Memory')
+    ax_top_mem.set_title('Top processes by Memory')
+    for i, b in enumerate(bars_mem):
+        ax_top_mem.annotate(f"{b.get_width():.1f}%", xy=(b.get_width(), b.get_y() + b.get_height() / 2), xytext=(3, 0), textcoords='offset points', va='center', fontsize=8)
+
+    fig.suptitle(f"Visual System Snapshot - {info['timestamp']}", fontsize=14)
     fig.savefig(out_png, dpi=150)
     plt.close(fig)
 
