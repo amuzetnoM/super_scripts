@@ -11,7 +11,7 @@ echo "Creating ODUS configuration backup..."
 # Backup important configs
 tar -czf "$BACKUP_FILE" \
     /etc/odus \
-    /opt/odus/intelligence \
+    "$(cd "$(dirname "$0")/.." && pwd)/intelligence" \
     /root/.zshrc \
     /root/.config 2>/dev/null || true
 

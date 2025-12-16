@@ -176,9 +176,39 @@ A: Check `/home/adam/worxpace/system_changelog.md` and `/var/log/odus/*` and the
 
 ---
 
+## Updates & Auto-Update Policy
+
+ODUS includes an *Auto-Update System* designed to keep the host and its security tooling up-to-date with minimal operator intervention. The auto-update is implemented by the `odus-autoupdate.sh` script and is scheduled via `odus-autoupdate.timer` (daily by default, configured in systemd).
+
+Key behaviors:
+
+- Security updates are applied automatically when detected (applied immediately to reduce exposure).
+- Non-security package upgrades are applied on the regular update cadence (daily by default).
+- Go-based security tools (nuclei, httpx, subfinder) are updated via `go install ...@latest` when `go` is present.
+- Nuclei templates are refreshed using `nuclei -update-templates`.
+- Metasploit is attempted via `msfupdate` if present, but the script logs guidance if Metasploit is packaged by the OS (apt-managed) instead of using `msfupdate`.
+- The script performs safe house-keeping: `apt autoremove`, `apt autoclean`, and logs everything under `/var/log/odus/autoupdate.log`.
+
+Safety and operator control:
+
+- You can temporarily disable auto-updates by masking or stopping the timer:
+
+```bash
+sudo systemctl mask odus-autoupdate.timer
+sudo systemctl stop odus-autoupdate.timer
+```
+
+- For more control, modify the systemd timer schedule or edit the `odus-autoupdate.sh` script to add a `--dry-run` or `--no-upgrade` flag if you prefer review before applying changes.
+
+- The intelligence engine (`odus-intelligence.py`) runs after updates to re-evaluate system health and can trigger suggestions or conservative healing actions.
+
+- Logs are the source of truth for update activity: `/var/log/odus/autoupdate.log`.
+
+---
+
 ## Security & best practices
 
-- ODUS runs scripts as root (via systemd) so review `/opt/odus/scripts` before enabling in untrusted environments.
+- ODUS runs scripts as root (via systemd) so review `./scripts` before enabling in untrusted environments.
 - Auto-update attempts to update both system packages and tool signatures (e.g., Nuclei templates) — configure carefully in production.
 - Keep `/home/adam/worxpace` workspace private and lock down SSH keys and sudoers for the ODUS admin user.
 

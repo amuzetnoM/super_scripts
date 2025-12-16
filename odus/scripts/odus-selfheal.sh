@@ -2,7 +2,8 @@
 
 ODUS_LOGS="/var/log/odus"
 LOG_FILE="$ODUS_LOGS/selfheal.log"
-QUARANTINE="/opt/odus/quarantine"
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+QUARANTINE="$BASE_DIR/quarantine"
 
 log_heal() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
@@ -42,10 +43,10 @@ done
 DISK_USAGE=$(df / | tail -1 | awk '{print $5}' | sed 's/%//')
 if [ "$DISK_USAGE" -gt 90 ]; then
     log_heal "⚠️  Critical disk space: ${DISK_USAGE}% - running emergency cleanup"
-    /opt/odus/scripts/odus-cleanup.sh emergency
+    "$ODUS_HOME/scripts/odus-cleanup.sh" emergency
 elif [ "$DISK_USAGE" -gt 80 ]; then
     log_heal "⚠️  High disk space: ${DISK_USAGE}% - running deep cleanup"
-    /opt/odus/scripts/odus-cleanup.sh deep
+    "$ODUS_HOME/scripts/odus-cleanup.sh" deep
 fi
 
 # Check memory pressure
@@ -97,7 +98,7 @@ fi
 log_heal "✅ Self-healing check completed"
 
 # Run intelligence analysis
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    if [ -f "$SCRIPT_DIR/odus-intelligence.py" ]; then
-        "$SCRIPT_DIR/odus-intelligence.py"
-    fi
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ -f "$SCRIPT_DIR/odus-intelligence.py" ]; then
+    "$SCRIPT_DIR/odus-intelligence.py"
+fi

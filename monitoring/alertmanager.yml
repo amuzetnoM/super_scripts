@@ -1,0 +1,8 @@
+route:
+  receiver: 'null'
+receivers:
+  - name: 'null'
+    # Add integrations here (email, slack, webhook) as needed
+    # Example webhook receiver:
+    # webhook_configs:
+    #  - url: 'http://localhost:5001/alert-receiver'

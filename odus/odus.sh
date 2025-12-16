@@ -1518,5 +1518,7 @@ MOTD_EOF
     echo ""
 }
 
-# Run main installation
-main "$@"
+# Run main installation (guarded so callers can source this file without auto-executing)
+if [ "${ODUS_SKIP_AUTO_MAIN:-}" != "true" ]; then
+    main "$@"
+fi

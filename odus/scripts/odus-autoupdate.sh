@@ -58,7 +58,6 @@ apt autoclean -y -qq 2>&1 | tee -a "$LOG_FILE"
 log_update "✅ Auto-update completed successfully"
 
 # Run intelligence analysis after updates
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [ -f "$SCRIPT_DIR/odus-intelligence.py" ]; then
-    "$SCRIPT_DIR/odus-intelligence.py"
+if [ -f "$ODUS_HOME/scripts/odus-intelligence.py" ]; then
+    "$ODUS_HOME/scripts/odus-intelligence.py"
 fi
