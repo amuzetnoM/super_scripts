@@ -21,7 +21,7 @@ An opinionated collection of operational and security-focused scripts for develo
 
 - **c.ops_provisioner/** — Cloud Ops provisioning helpers (Python)
 - **sys_maintainer/** — System maintenance shell scripts (bash)
-- **odus/** — ODUS integration wrapper and documentation (bash)
+- **odus/** — ODUS system manager (bash)
 - **visual_specs/** — Visual system snapshot utility (Python: `matplotlib`, `psutil`)
 
 Each subfolder includes a detailed `README.md` with usage, requirements, and examples.
