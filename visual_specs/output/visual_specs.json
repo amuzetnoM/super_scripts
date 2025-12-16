@@ -1,0 +1,134 @@
+{
+  "timestamp": "2025-12-16T05:30:38.901184-05:00",
+  "platform": "Linux-6.16.8+kali-amd64-x86_64-with-glibc2.41",
+  "uname": {
+    "sysname": "Linux",
+    "node": "dragonfly",
+    "release": "6.16.8+kali-amd64",
+    "version": "#1 SMP PREEMPT_DYNAMIC Kali 6.16.8-1kali1 (2025-09-24)",
+    "machine": "x86_64"
+  },
+  "cpu_count_logical": 4,
+  "cpu_count_physical": 2,
+  "cpu_freq_mhz": {
+    "current": 1293.59325,
+    "min": 400.0,
+    "max": 3400.0
+  },
+  "percpu_percent": [
+    14.0,
+    16.7,
+    15.0,
+    12.2
+  ],
+  "loadavg": [
+    1.7998046875,
+    1.2939453125,
+    0.923828125
+  ],
+  "mem": {
+    "total": 16531931136,
+    "available": 11556106240,
+    "percent": 30.1,
+    "used": 4975824896
+  },
+  "swap": {
+    "total": 499118080,
+    "used": 1011712,
+    "percent": 0.2
+  },
+  "disk": {
+    "total": 97825230848,
+    "used": 18370039808,
+    "free": 74438594560,
+    "percent": 18
+  },
+  "top_cpu": [
+    {
+      "name": "systemd",
+      "memory_percent": 0.09912995563061121,
+      "pid": 1,
+      "cpu_percent": 0.0,
+      "username": "root"
+    },
+    {
+      "name": "kthreadd",
+      "memory_percent": 0.0,
+      "pid": 2,
+      "cpu_percent": 0.0,
+      "username": "root"
+    },
+    {
+      "name": "pool_workqueue_release",
+      "memory_percent": 0.0,
+      "pid": 3,
+      "cpu_percent": 0.0,
+      "username": "root"
+    },
+    {
+      "name": "kworker/R-rcu_gp",
+      "memory_percent": 0.0,
+      "pid": 4,
+      "cpu_percent": 0.0,
+      "username": "root"
+    },
+    {
+      "name": "kworker/R-sync_wq",
+      "memory_percent": 0.0,
+      "pid": 5,
+      "cpu_percent": 0.0,
+      "username": "root"
+    },
+    {
+      "name": "kworker/R-kvfree_rcu_reclaim",
+      "memory_percent": 0.0,
+      "pid": 6,
+      "cpu_percent": 0.0,
+      "username": "root"
+    }
+  ],
+  "top_mem": [
+    {
+      "name": "Xorg",
+      "memory_percent": 5.928025854559185,
+      "pid": 981,
+      "cpu_percent": 0.0,
+      "username": "root"
+    },
+    {
+      "name": "code",
+      "memory_percent": 4.191802217775703,
+      "pid": 38492,
+      "cpu_percent": 0.0,
+      "username": "adam"
+    },
+    {
+      "name": "code",
+      "memory_percent": 4.010365410706729,
+      "pid": 32319,
+      "cpu_percent": 0.0,
+      "username": "adam"
+    },
+    {
+      "name": "code",
+      "memory_percent": 3.676703048178001,
+      "pid": 105930,
+      "cpu_percent": 0.0,
+      "username": "adam"
+    },
+    {
+      "name": "xfce4-panel",
+      "memory_percent": 1.3810306740440563,
+      "pid": 1339,
+      "cpu_percent": 0.0,
+      "username": "adam"
+    },
+    {
+      "name": "code",
+      "memory_percent": 1.3732261411713638,
+      "pid": 32234,
+      "cpu_percent": 0.0,
+      "username": "adam"
+    }
+  ]
+}
