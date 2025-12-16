@@ -9,9 +9,6 @@ An opinionated collection of operational and security-focused scripts for develo
 
 ## What you'll find here
 
-<<<<<<< HEAD
-## What is this?
-
 - Centralize handy utilities used across multiple projects
 - Provide audited, well-documented scripts you can trust
 - Make security tools (like HADES) discoverable and easy to run
@@ -23,7 +20,7 @@ An opinionated collection of operational and security-focused scripts for develo
 - **hades_env_guard/** — HADES Environment Guard: interactive secret scanner and manager (PowerShell)
 =======
 - **hades_env_guard/** — HADES Environment Guard: interactive secret scanner (PowerShell)
->>>>>>> 0ddb496b983331a1061b7a924b5ce1241fcb3e87
+
 - **c.ops_provisioner/** — Cloud Ops provisioning helpers (Python)
 - **sys_maintainer/** — System maintenance shell scripts (bash)
 - **odus/** — ODUS integration wrapper and documentation (bash)
