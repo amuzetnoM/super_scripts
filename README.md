@@ -9,9 +9,9 @@ An opinionated collection of operational and security-focused scripts for develo
 
 ## What you'll find here
 
-- Centralize handy utilities used across multiple projects
-- Provide audited, well-documented scripts you can trust
-- Make security tools discoverable and easy to run
+- Centralized handy utilities used across multiple projects
+- Audited, well-documented scripts you can trust
+- Security tools discovery made simple and easy to run
 
 --
 
