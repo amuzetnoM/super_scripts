@@ -1,18 +1,30 @@
-# Mass Provisioning Script for Google Cloud Ops Agents
+# Cloud Ops Provisioner
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
-[![Google Cloud](https://img.shields.io/badge/Google%20Cloud-SDK-blue.svg)](https://cloud.google.com/sdk)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg)](https://github.com/your-repo/actions)
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](../LICENSE)
 
-## 1. Overview
+A small, single-file CLI tool (`cloud_ops_provisioning.py`) to provision Google Cloud Ops agents across many VM instances. It supports multiple execution providers (`local-gcloud`, `paramiko`, `mock`), concurrency, retries, and state management.
 
-This repository contains a single-file CLI tool, `cloud_ops_provisioning.py`, that automates the installation and configuration of Google Cloud's operations agents (Logging, Metrics, and the Ops Agent) across many Google Cloud VM instances.
+## Features
+- Concurrent provisioning using `ThreadPoolExecutor`
+- Pluggable providers: `local-gcloud`, `paramiko`, `mock` (dry-run)
+- State file to avoid re-provisioning
+- Retries with exponential backoff and logging
+- Test suite included under `test/`
 
-The tool reads a CSV of instance full names and JSON-encoded agent rules, validates inputs, and executes installer commands on each target VM. It supports multiple execution providers so it can run where `gcloud` is available or where only SSH is possible.
+## Quick Start
 
-## 2. Features
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt  # if using paramiko
+python cloud_ops_provisioning.py --file example_vms.csv --max-workers 10
+```
 
+## Requirements
+- Python 3.8+
+- `gcloud` (if using `local-gcloud` provider)
+- `paramiko` (optional provider)
 - **Concurrent Execution:** Uses `ThreadPoolExecutor` to provision multiple instances in parallel.
 - **Provider Abstraction:** Built-in providers include `local-gcloud` (uses `gcloud compute ssh`), `paramiko` (direct SSH using `paramiko`), and a `mock` dry-run provider for testing.
 - **State Management:** Records provisioning status in a state file to avoid re-running successful installs unless forced.

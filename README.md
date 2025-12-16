@@ -1,63 +1,48 @@
 
-#  SUPER SCRIPTS 🪖🔧
+# SUPER SCRIPTS 🪖🔧
 
+An opinionated collection of operational and security-focused scripts for developers and operators. Each tool is documented, tested, and intended to be easily discoverable and usable by operators.
 
-An opinionated collection of operational and security-focused scripts for developers and operators — curated tools to help run, secure, and maintain projects.
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-This repository hosts small, well-tested utilities such as **HADES Environment Guard** (a universal secret scanner and manager), provisioning helpers, and system maintenance scripts.
+---
 
---
+## What you'll find here
 
-## Why this repo?
-
-- Centralize handy utilities used across multiple projects
-- Provide audited, well-documented scripts you can trust
-- Make security tools (like HADES) discoverable and easy to run
-
---
-
-## Included tools
-
-- **hades_env_guard/** — HADES Environment Guard: interactive secret scanner and manager (PowerShell)
+- **hades_env_guard/** — HADES Environment Guard: interactive secret scanner (PowerShell)
 - **c.ops_provisioner/** — Cloud Ops provisioning helpers (Python)
-- **sys_maintainer/** — System maintenance shell scripts
+- **sys_maintainer/** — System maintenance shell scripts (bash)
+- **odus/** — ODUS integration wrapper and documentation (bash)
+- **visual_specs/** — Visual system snapshot utility (Python: `matplotlib`, `psutil`)
 
-Each tool contains its own README and usage examples. See the folders for details.
+Each subfolder includes a detailed `README.md` with usage, requirements, and examples.
 
---
+---
 
 ## Quick Start
 
-Clone the repo and run the HADES scanner:
+Clone the repo and run a tool:
 
 ```bash
 git clone https://github.com/amuzetnoM/super_scripts.git
-cd super_scripts/hades_env_guard
-pwsh ./hades_env_guard.ps1
+cd super_scripts
+# Examples
+bash sys_maintainer/system_maintenance.sh --dry-run
+python3 visual_specs/visual_specs.py --outdir /tmp
 ```
 
-HADES will prompt you for the repository path to scan and guide you through sanitization and secure storage.
+---
 
---
+## Contribution & Standards
 
-## Security & Best Practices
+We aim for consistent READMEs with: a short overview, quick start, requirements, examples, and contributing notes. If you add a script, please include a `README.md` following this format and add an entry to this file.
 
-- Always run HADES or equivalent scanners before publishing or sharing repositories.
-- Keep secrets out of the repo: use `.env` files protected by `.gitignore`, and store runtime secrets in secret stores (GitHub Secrets, HashiCorp Vault, etc.)
-- If a secret is committed, use `git-filter-repo` (installed via pip) to scrub history safely.
-
---
-
-## Contributing
-
-Contributions are welcome. Please open issues for bugs or feature requests and submit PRs with tests and documentation.
-
---
+---
 
 ## License
 
 MIT
 
---
+---
 
-If you'd like, I can also add CI checks (linting, unit tests) and an automated release workflow for this repo.
+If you want, I can open a PR template and add GitHub Actions for linting and basic tests across the Python scripts.
